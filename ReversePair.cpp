@@ -3,13 +3,14 @@
 #include <vector>
 
 using namespace std;
-void merge_sort(vector<int> &q, int l, int r)
+int merge_sort(vector<int> &q, int l, int r)
 {
 	if(l >= r)
-		return;
+		return 0;
+	int res = 0;
 	int mid = (l + r)/2;
-	merge_sort(q, l, mid);
-	merge_sort(q, mid+1, r);
+	res += merge_sort(q, l, mid);
+	res += merge_sort(q, mid+1, r);
 	static vector<int> w;
 	w.clear();
 	int i = l,
@@ -18,10 +19,14 @@ void merge_sort(vector<int> &q, int l, int r)
 		if(q[i] <= q[j])
 			w.push_back(q[i++]);
 		else
+		{
 		       	w.push_back(q[j++]);
+			res += mid - i + 1;
+		}
 	while(i <= mid) w.push_back(q[i++]);
 	while(j <= r) w.push_back(q[j++]);
 	for(i = l,j = 0 ; j < w.size(); i++,j++) q[i] = w[j];
+	return res;
 
 }
 int main()
@@ -35,7 +40,7 @@ int main()
 		q.push_back(k);
 
 	}
-	merge_sort(q, 0, q.size()-1);
+	cout << merge_sort(q, 0, q.size()-1) << endl;
 	for(auto x : q )
 		cout << x << ' ';
 	cout << endl;
